@@ -3,11 +3,22 @@
 // description: short message shown in the GitHub UI (max 140 chars)
 // context: label for the check (e.g. 'Jenkins CI / Build', 'Jenkins CI / Trivy')
 def updateCommitStatus(String state, String description, String context = 'Jenkins CI') {
+    // githubNotify auto-inference requires the GitHub Branch Source plugin's SCM object.
+    // When that is absent (plain Git source, or plugin version mismatch), inference fails.
+    // Parsing GIT_URL + GIT_COMMIT is always reliable — Jenkins sets both during checkout.
+    def repoUrl = env.GIT_URL ?: env.GIT_URL_1 ?: ''
+    def matcher = repoUrl =~ /github\.com[\/:]([^\/]+)\/([^\/]+?)(?:\.git)?$/
+    if (!matcher) {
+        error("updateCommitStatus: cannot parse GitHub account/repo from GIT_URL '${repoUrl}'")
+    }
     githubNotify(
         credentialsId: 'github-token',
         status:        state.toUpperCase(),
         description:   description,
-        context:       context
+        context:       context,
+        account:       matcher[0][1],
+        repo:          matcher[0][2],
+        sha:           env.GIT_COMMIT
     )
 }
 
