@@ -39,7 +39,7 @@ def updateCommitStatus(String state, String description, String context = 'Jenki
 // Auto-assigns to the active sprint. Returns the created issue key (e.g. ROBO-42).
 def createJiraTicket(String project, String component, String appVersion, String shortCommit) {
     def sprintId = ''
-    withCredentials([
+   /*  withCredentials([
         string(credentialsId: 'jira-url', variable: 'JIRA_URL'),
         usernamePassword(credentialsId: 'jira-creds', usernameVariable: 'JIRA_EMAIL', passwordVariable: 'JIRA_TOKEN')
     ]) {
@@ -53,7 +53,7 @@ def createJiraTicket(String project, String component, String appVersion, String
                 | jq -r '.values[0].id'
             ''', returnStdout: true).trim()
         }
-    }
+    } */
 
     def issue = [
         fields: [
@@ -61,7 +61,7 @@ def createJiraTicket(String project, String component, String appVersion, String
             summary:          "${component} ${appVersion} (${shortCommit}) ready for UAT",
             issuetype:        [name: 'Story'],
             labels:           [shortCommit],
-            customfield_10020: sprintId.toInteger(),
+            //customfield_10020: sprintId.toInteger(),
             description: [
                 type: 'doc', version: 1,
                 content: [[
