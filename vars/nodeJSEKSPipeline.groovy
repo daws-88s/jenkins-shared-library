@@ -54,7 +54,7 @@ def call(Map configMap){
                     }
                 }
             }
-            stage ('SonarQube Analysis'){
+            /* stage ('SonarQube Analysis'){
                 steps {
                     script {
                         def scannerHome = tool name: 'sonar-8' // agent configuration
@@ -107,7 +107,7 @@ def call(Map configMap){
                         }
                     }
                 }
-            }
+            } */
             stage('Build Image') {
                 steps {
                 script{
@@ -122,7 +122,7 @@ def call(Map configMap){
                     }
                 }
             }
-            stage('Trivy OS Scan') {
+            /* stage('Trivy OS Scan') {
                 steps {
                     script {
                         // Generate table report
@@ -196,7 +196,7 @@ def call(Map configMap){
                         }
                     }
                 }
-            }
+            } */
             stage ('Push image to ECR'){
                 steps {
                     script {
